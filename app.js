@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose')
+const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
 const Dish = require('./models/dish');
 const { rmSync } = require('fs');
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') //shopApp database
 
 const app = express()
 
+app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
 app.set('views', path.join (__dirname, 'views'))
 
