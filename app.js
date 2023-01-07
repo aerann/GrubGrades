@@ -18,6 +18,8 @@ const app = express()
 app.set('view engine', 'ejs')
 app.set('views', path.join (__dirname, 'views'))
 
+app.use(express.urlencoded({ extended: true})) //parse request body
+
 app.get('/', (req, res) =>{
     res.render('home')
 })
@@ -27,9 +29,20 @@ app.get('/dishes', async (req, res) =>{
     res.render('dishes/index', {dishes})
 })
 
+app.get('/dishes/new', (req, res) => {
+    res.render('dishes/new')
+})
+
 app.get('/dishes/:id', async (req, res) => {
     const dish = await Dish.findById(req.params.id)
     res.render('dishes/show', {dish})
+})
+
+//create new dish to database
+app.post('/dishes', async(req,res) =>{
+    const dish = new Dish(req.body.dishes)
+    await dish.save(); 
+    res.redirect(`/dishes/${dish._id}`)
 })
 
 

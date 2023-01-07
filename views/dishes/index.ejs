@@ -7,7 +7,10 @@
     <title>Dishes</title>
 </head>
 <body>
-    <h1>hey these r my dishes</h1>
+    <h1>All dishes</h1>
+    <div>
+        <a href="/dishes/new">Add a Dish</a>
+    </div>
     <ul>
         <% for (let dish of dishes) { %> 
             <li><a href="/dishes/<%= dish._id %>"><%= dish.title %></a> </li>
