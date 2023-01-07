@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 const cities = require('./cities')
 const {foods, descriptors} =  require('./seedHelpers')
-const Dish = require('../models/dish')
+const Dish = require('../models/dish');
 
 mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') //shopApp database
     .then(() => {
