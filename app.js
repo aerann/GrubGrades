@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 const Dish = require('./models/dish');
 const { rmSync } = require('fs');
 
@@ -19,6 +20,7 @@ app.set('view engine', 'ejs')
 app.set('views', path.join (__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true})) //parse request body
+app.use(methodOverride('_method'));
 
 app.get('/', (req, res) =>{
     res.render('home')
@@ -45,6 +47,22 @@ app.post('/dishes', async(req,res) =>{
     res.redirect(`/dishes/${dish._id}`)
 })
 
+app.get('/dishes/:id/edit', async(req,res) =>{
+    const dish = await Dish.findById(req.params.id)
+    res.render('dishes/edit', {dish})
+})
+
+app.put('/dishes/:id', async(req, res) => {
+    const {id} = req.params;
+    const dish = await Dish.findByIdAndUpdate(id, {...req.body.dishes})
+    res.redirect(`/dishes/${dish._id}`)
+})
+
+app.delete('/dishes/:id', async(req, res) =>{
+    const {id} = req.params;
+    await Dish.findByIdAndDelete(id)
+    res.redirect('/dishes')
+})
 
 app.listen(3000, () =>{
     console.log('Serving on port 3000')

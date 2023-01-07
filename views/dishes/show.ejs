@@ -1,3 +1,4 @@
+<!-- Shows detail of a particular dish -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,12 @@
 <body>
     <h1><%= dish.title %> </h1>
     <h1><%= dish.location %> </h1>
+    <p><a href="/dishes/<%=dish._id%>/edit">Edit</a></p>
+    <p>
+        <form action="/dishes/<%=dish._id%>?_method=DELETE" method="POST">
+            <button>Delete</button>
+        </form>
+    </p>
     <footer>
         <a href="/dishes">All Dishes</a>
     </footer>
