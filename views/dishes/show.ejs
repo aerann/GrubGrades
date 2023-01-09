@@ -1,18 +1,31 @@
 <!-- Shows detail of a particular dish -->
 <% layout('layouts/boilerplate')%>
-    <h1><%= dish.title %> </h1>
-    <h2><%= dish.location %> </h2>
-    <img src="<%=dish.image%>" alt="">
-    <p><%=dish.description%></p>
-    <p><a href="/dishes/<%=dish._id%>/edit">Edit</a></p>
-    <p>
-        <form action="/dishes/<%=dish._id%>?_method=DELETE" method="POST">
-            <button>Delete</button>
-        </form>
-    </p>
-    <footer>
-        <a href="/dishes">All Dishes</a>
-    </footer>
+
+<div class="row"> 
+    <div class="col-6 offset-3 mb-3">
+        <div class="card">
+            <img src="<%=dish.image%>" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title"><%= dish.title %> </h5>
+              <p class="card-text"><%=dish.description%></p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-muted"><%= dish.location %></li>
+              <li class="list-group-item">$<%= dish.price %>/bowl</li>
+            </ul>
+            <div class="card-body">
+              <a href="/dishes/<%=dish._id%>/edit" class="card-link btn btn-info">Edit</a>
+              <form class="d-inline" action="/dishes/<%=dish._id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
     
-</body>
-</html>
