@@ -1,18 +1,45 @@
 <% layout('layouts/boilerplate')%>
 
-    <form action="/dishes" method ="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="dishes[title]">
-        </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="dishes[location]">
-        </div>
-        <button>Submit a Dish</button>
-    </form>
-    <a href="/dishes">All Dishes</a>
-    
-</body>
-</html>
+<div class="row">
+    <h1 class="text-center">New Dish</h1>
+    <div class="col-6 offset-3">
+        <form action="/dishes" method ="POST">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" id="title" name="dishes[title]">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" type="text" id="location" name="dishes[location]">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <input class="form-control" type="text" id="image" name="dishes[image]">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="price">Price of Noodles</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" 
+                    aria-describedby="price-label" name="dishes[price]">
+                </div>
+            </div>
+           
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" name="dishes[description]"></textarea>
+            </div>
+
+
+            <div class="mb-3">
+                <button class="btn btn-success">Add a Dish</button>
+            </div>
+        </form>
+        <a href="/dishes">All Dishes</a>
+        
+    </body>
+    </html>
+    </div>
+</div>
 
