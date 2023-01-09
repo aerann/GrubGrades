@@ -5,32 +5,40 @@ module.exports.descriptors = [
     'Salty',
     'Savoury',
     'Cheap',
-    'Decedant',
     'Bitter',
     'Bland',
-    'Crunchy',
+    'Crunchy Peanut',
     'Soft',
-    'Sour'
+    'Sour',
+    'Flaming Hot',
+    'Signature',
+    'Pad Thai',
+    'Lo Mein',
+    'Sesame',
+    'Beef',
+    'Spicy Chicken',
+    'Pork',
+    'Vegan',
+    'Creamy'
+
 
 ]
 
 module.exports.foods = [
-    'Cake Slice',
     'Noodles',
-    'Dumplings',
-    'Soup',
-    'Stew',
-    'Bread',
-    'Pasta',
-    'Sandwich',
-    'Hotpot',
-    'Crossaint',
-    'Onigiri',
+    'Fried Noodles',
+    'Soup Noodles',
+    'Handmade Noodles',
+    'Fresh Noodles', 
+    'Steamed Noodles',
+    'Instant Noodles',
+    'Rice Noodles',
+    'Cold Noodles',
+    'Pan Fried',
+    'Stir-Fried',
+    'Udon',
     'Ramen',
-    'Pho',
-    'Sushi',
-    'Pork Belly',
-    'Steak',
-    'Crab'
-
+    'Hand-pulled noodles',
+    'Soba',
+    'Miso Ramen'
 ]
