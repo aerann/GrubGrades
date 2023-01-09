@@ -1,7 +1,9 @@
 <!-- Shows detail of a particular dish -->
 <% layout('layouts/boilerplate')%>
     <h1><%= dish.title %> </h1>
-    <h1><%= dish.location %> </h1>
+    <h2><%= dish.location %> </h2>
+    <img src="<%=dish.image%>" alt="">
+    <p><%=dish.description%></p>
     <p><a href="/dishes/<%=dish._id%>/edit">Edit</a></p>
     <p>
         <form action="/dishes/<%=dish._id%>?_method=DELETE" method="POST">
