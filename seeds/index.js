@@ -22,8 +22,9 @@ const sample = array => array[Math.floor(Math.random() * array.length)]
 // unsplash collections. 
 const collectionOne = 'ikF35KnI5OM';           
 const collectionTwo = 'y1tbQlwWCqk'; 
-const collectionThree = 'CUJ7U0x4gik'; 
+const collectionThree = ''; 
 
+//call unsplash api and return small image
 async function seedImg(collection){
     try{
         const resp = await
@@ -31,7 +32,7 @@ async function seedImg(collection){
         params: {
         client_id: 'TfeDYhDsI8QFb852etWwfZpPEA2YrAdTHI0YPWGLT2g',
         collections: collection,
-        count:30
+        count: 30 //max count allowed by unsplash API
       },
       headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' }
     })
@@ -41,12 +42,17 @@ async function seedImg(collection){
   }
 }
 
+//seed database with images
 const seedDB = async() => {
     await Dish.deleteMany({}); 
+    //make 3 API requests to unsplash, 30 images per request
     const imageSetOne = await seedImg(collectionOne);
     const imageSetTwo = await seedImg(collectionTwo);
     const imageSetThree = await seedImg(collectionThree);
-    const imgs = [...imageSetOne, ...imageSetTwo, ...imageSetThree];
+    //spread into one array
+    const imgs = [...imageSetOne, ...imageSetTwo, ...imageSetThree]; //90 random images
+
+    //seeding data into dishes collection
     for(let i =0; i<50; i++){
         const random1000 = Math.floor(Math.random() * 1000); 
         const price = Math.floor(Math.random() * 10) + 9
