@@ -3,18 +3,27 @@
 <div class="row">
     <h1 class="text-center">New Dish</h1>
     <div class="col-6 offset-3">
-        <form action="/dishes" method ="POST">
+        <form action="/dishes" method ="POST" novalidate class="validated-form">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="dishes[title]">
+                <input class="form-control" type="text" id="title" name="dishes[title]" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
-                <input class="form-control" type="text" id="location" name="dishes[location]">
+                <input class="form-control" type="text" id="location" name="dishes[location]" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
-                <input class="form-control" type="text" id="image" name="dishes[image]">
+                <input class="form-control" type="text" id="image" name="dishes[image]" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
 
             <div class="mb-3">
@@ -22,13 +31,19 @@
                 <div class="input-group">
                     <span class="input-group-text" id="price-label">$</span>
                     <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" 
-                    aria-describedby="price-label" name="dishes[price]">
+                    aria-describedby="price-label" name="dishes[price]" required>
+                    <div class="valid-feedback">
+                        Looks Good!
+                    </div>
                 </div>
             </div>
            
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="dishes[description]"></textarea>
+                <textarea class="form-control" type="text" id="description" name="dishes[description]" required></textarea>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
 
 
@@ -42,4 +57,6 @@
     </html>
     </div>
 </div>
+
+
 

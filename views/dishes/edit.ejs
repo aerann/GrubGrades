@@ -4,18 +4,27 @@
 <div class="row">
     <h1 class="text-center">Edit Dish</h1>
     <div class="col-6 offset-3">
-        <form action="/dishes/<%=dish._id%>?_method=PUT" method="POST">
+        <form action="/dishes/<%=dish._id%>?_method=PUT" method="POST" novalidate class="validated-form"> 
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="dishes[title]" value="<%=dish.title%>">
+                <input class="form-control" type="text" id="title" name="dishes[title]" value="<%=dish.title%>" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
-                <input class="form-control" type="text" id="location" name="dishes[location]" value="<%=dish.location%>">
+                <input class="form-control" type="text" id="location" name="dishes[location]" value="<%=dish.location%>" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
-                <input class="form-control" type="text" id="image" name="dishes[image]" value="<%=dish.image%>">
+                <input class="form-control" type="text" id="image" name="dishes[image]" value="<%=dish.image%>" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
 
             <div class="mb-3">
@@ -23,13 +32,19 @@
                 <div class="input-group">
                     <span class="input-group-text" id="price-label">$</span>
                     <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" 
-                    aria-describedby="price-label" name="dishes[price]" value="<%=dish.price%>">
+                    aria-describedby="price-label" name="dishes[price]" value="<%=dish.price%>" required>
+                </div>
+                <div class="valid-feedback">
+                    Looks Good!
                 </div>
             </div>
            
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="dishes[description]"><%=dish.description%></textarea>
+                <textarea class="form-control" type="text" id="description" name="dishes[description]" required><%=dish.description%></textarea>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
             </div>
 
 
