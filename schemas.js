@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const dishSchema = Joi.object({
+module.exports.dishSchema = Joi.object({
     dish: Joi.object({
         title: Joi.string().required(),
         price: Joi.number().required().min(0),

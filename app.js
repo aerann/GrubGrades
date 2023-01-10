@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose')
 const Joi = require('joi')
+const {dishSchema} = require('./schemas.js')
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
@@ -28,6 +29,16 @@ app.set('views', path.join (__dirname, 'views'))
 app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
 
+const validateDish = (req,res,next) => {
+    const {error} = dishSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg,400)
+    } else{
+        next();
+    }
+}
+
 app.get('/', (req, res) =>{
     res.render('home')
 })
@@ -41,30 +52,11 @@ app.get('/dishes/new', (req, res) => {
     res.render('dishes/new')
 })
 
-app.get('/dishes/:id', catchAsync (async (req, res) => {
+app.get('/dishes/:id', validateDish, catchAsync (async (req, res) => {
     const dish = await Dish.findById(req.params.id)
     res.render('dishes/show', {dish})
 }))
 
-const validateDish = (req,res,next) => {
-    const DishSchema = Joi.object({
-        dish: Joi.object({
-            title: Joi.string().required(),
-            price: Joi.number().required().min(0),
-            image: Joi.string().required(),
-            location: Joi.string().required(),
-            description: Joi.string().required()
-        }).required()
-    }) 
-    const {error} = DishSchema.validate(req.body)
-
-    if(error){
-        const msg = error.details.map(el => el.message).join(',') //map over the detail object
-        throw new ExpressError(msg, 400); //sends to error handler
-    } else{
-        next(); 
-    }
-}
 
 //create new dish to database
 app.post('/dishes', validateDish, catchAsync( async(req, res, next) =>{
