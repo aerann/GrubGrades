@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
 
 const validateDish = (req,res,next) => {
-    const {error} = dishSchema.validate(req.body);
+    const {error} = dishSchema.validate(req.body.dish);
     if(error){
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg,400)
