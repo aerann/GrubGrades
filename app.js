@@ -3,6 +3,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
+const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
 const Dish = require('./models/dish');
 const { rmSync } = require('fs');
@@ -48,7 +49,6 @@ app.post('/dishes', catchAsync( async(req, res, next) =>{
     const dish = new Dish(req.body.dishes)
     await dish.save(); 
     res.redirect(`/dishes/${dish._id}`)
-   
 }))
 
 app.get('/dishes/:id/edit', catchAsync(async(req,res) =>{
@@ -68,8 +68,16 @@ app.delete('/dishes/:id', catchAsync (async(req, res) =>{
     res.redirect('/dishes')
 }))
 
+//for every request and every path (that doesn't exist)
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404))
+})
+
+//error handler
 app.use((err, req, res, next) =>{
-    res.send('oh boy something went wrong!')
+    const {statusCode = "500"} = err
+    if(!err.message) err.message = "Oh no, Something went wrong"
+    res.status(statusCode).render('errors', {err})
 })
 
 app.listen(3000, () =>{
