@@ -8,6 +8,7 @@ const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
 const Dish = require('./models/dish');
 const { rmSync } = require('fs');
+const { validate } = require('./models/dish');
 
 mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') //shopApp database
     .then(() => {
@@ -45,12 +46,8 @@ app.get('/dishes/:id', catchAsync (async (req, res) => {
     res.render('dishes/show', {dish})
 }))
 
-
-
-//create new dish to database
-app.post('/dishes', catchAsync( async(req, res, next) =>{
-    //error handling for non client-side schema validations
-    const dishSchema = Joi.object({
+const validateDish = (req,res,next) => {
+    const DishSchema = Joi.object({
         dish: Joi.object({
             title: Joi.string().required(),
             price: Joi.number().required().min(0),
@@ -59,13 +56,18 @@ app.post('/dishes', catchAsync( async(req, res, next) =>{
             description: Joi.string().required()
         }).required()
     }) 
-    const {error} = dishSchema.validate(req.body)
+    const {error} = DishSchema.validate(req.body)
 
     if(error){
         const msg = error.details.map(el => el.message).join(',') //map over the detail object
         throw new ExpressError(msg, 400); //sends to error handler
+    } else{
+        next(); 
     }
+}
 
+//create new dish to database
+app.post('/dishes', validateDish, catchAsync( async(req, res, next) =>{
     const dish = new Dish(req.body.dishes)
     await dish.save(); 
     res.redirect(`/dishes/${dish._id}`)
@@ -76,7 +78,7 @@ app.get('/dishes/:id/edit', catchAsync(async(req,res) =>{
     res.render('dishes/edit', {dish})
 }))
 
-app.put('/dishes/:id', catchAsync(async(req, res) => {
+app.put('/dishes/:id', validateDish, catchAsync(async(req, res) => {
     const {id} = req.params;
     const dish = await Dish.findByIdAndUpdate(id, {...req.body.dishes})
     res.redirect(`/dishes/${dish._id}`)
