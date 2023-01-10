@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose')
+const Joi = require('joi')
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
@@ -44,8 +45,27 @@ app.get('/dishes/:id', catchAsync (async (req, res) => {
     res.render('dishes/show', {dish})
 }))
 
+
+
 //create new dish to database
 app.post('/dishes', catchAsync( async(req, res, next) =>{
+    //error handling for non client-side schema validations
+    const dishSchema = Joi.object({
+        dish: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            location: Joi.string().required(),
+            description: Joi.string().required()
+        }).required()
+    }) 
+    const {error} = dishSchema.validate(req.body)
+
+    if(error){
+        const msg = error.details.map(el => el.message).join(',') //map over the detail object
+        throw new ExpressError(msg, 400); //sends to error handler
+    }
+
     const dish = new Dish(req.body.dishes)
     await dish.save(); 
     res.redirect(`/dishes/${dish._id}`)
