@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose')
-const Joi = require('joi')
 const {dishSchema} = require('./schemas.js')
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
@@ -30,7 +29,8 @@ app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
 
 const validateDish = (req,res,next) => {
-    const {error} = dishSchema.validate(req.body.dish);
+    const {error} = dishSchema.validate(req.body);
+    console.log("lol", dishSchema.validate(req.body))
     if(error){
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg,400)
@@ -52,7 +52,7 @@ app.get('/dishes/new', (req, res) => {
     res.render('dishes/new')
 })
 
-app.get('/dishes/:id', validateDish, catchAsync (async (req, res) => {
+app.get('/dishes/:id', catchAsync (async (req, res) => {
     const dish = await Dish.findById(req.params.id)
     res.render('dishes/show', {dish})
 }))
@@ -60,7 +60,9 @@ app.get('/dishes/:id', validateDish, catchAsync (async (req, res) => {
 
 //create new dish to database
 app.post('/dishes', validateDish, catchAsync( async(req, res, next) =>{
-    const dish = new Dish(req.body.dishes)
+    console.log(req.body)
+    const dish = new Dish(req.body.dish)
+    if(dish.price <0) throw new ExpressError('Invalid Price', 400)
     await dish.save(); 
     res.redirect(`/dishes/${dish._id}`)
 }))
@@ -71,9 +73,11 @@ app.get('/dishes/:id/edit', catchAsync(async(req,res) =>{
 }))
 
 app.put('/dishes/:id', validateDish, catchAsync(async(req, res) => {
+    console.log("this is req.body", req.body)
     const {id} = req.params;
-    const dish = await Dish.findByIdAndUpdate(id, {...req.body.dishes})
-    res.redirect(`/dishes/${dish._id}`)
+    const dish = await Dish.findByIdAndUpdate(id, {...req.body.dish})
+    if(req.body.dish.price <0) throw new ExpressError('Invalid Price', 400)
+    {res.redirect(`/dishes/${dish._id}`)}
 })
 )
 app.delete('/dishes/:id', catchAsync (async(req, res) =>{

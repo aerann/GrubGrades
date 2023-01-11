@@ -6,21 +6,21 @@
         <form action="/dishes" method ="POST" novalidate class="validated-form">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="dishes[title]" required>
+                <input class="form-control" type="text" id="title" name="dish[title]" required>
                 <div class="valid-feedback">
                     Looks Good!
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
-                <input class="form-control" type="text" id="location" name="dishes[location]" required>
+                <input class="form-control" type="text" id="location" name="dish[location]" required>
                 <div class="valid-feedback">
                     Looks Good!
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
-                <input class="form-control" type="text" id="image" name="dishes[image]" required>
+                <input class="form-control" type="text" id="image" name="dish[image]" required>
                 <div class="valid-feedback">
                     Looks Good!
                 </div>
@@ -31,7 +31,7 @@
                 <div class="input-group">
                     <span class="input-group-text" id="price-label">$</span>
                     <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" 
-                    aria-describedby="price-label" name="dishes[price]" required>
+                    aria-describedby="price-label" name="dish[price]" required>
                     <div class="valid-feedback">
                         Looks Good!
                     </div>
@@ -40,7 +40,7 @@
            
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="dishes[description]" required></textarea>
+                <textarea class="form-control" type="text" id="description" name="dish[description]" required></textarea>
                 <div class="valid-feedback">
                     Looks Good!
                 </div>
