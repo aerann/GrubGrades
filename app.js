@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose')
-const {dishSchema} = require('./schemas.js')
+const {dishSchema, reviewSchema} = require('./schemas.js')
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
@@ -29,7 +29,16 @@ app.use(methodOverride('_method'));
 
 const validateDish = (req,res,next) => {
     const {error} = dishSchema.validate(req.body);
-    console.log("lol", dishSchema.validate(req.body))
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg,400)
+    } else{
+        next();
+    }
+}
+
+const validateReview = (req,res,next) => {
+    const {error} = reviewSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg,400)
@@ -83,7 +92,7 @@ app.delete('/dishes/:id', catchAsync (async(req, res) =>{
     res.redirect('/dishes')
 }))
 
-app.post('/dishes/:id/reviews', catchAsync(async(req,res) => {
+app.post('/dishes/:id/reviews', validateReview, catchAsync(async(req,res) => {
     const dish = await Dish.findById(req.params.id);
     const review = new Review(req.body.review)
     dish.reviews.push(review)
