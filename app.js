@@ -7,8 +7,7 @@ const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
 const Dish = require('./models/dish');
-const { rmSync } = require('fs');
-const { validate } = require('./models/dish');
+const Review = require('./models/review')
 
 mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') //shopApp database
     .then(() => {
@@ -62,7 +61,6 @@ app.get('/dishes/:id', catchAsync (async (req, res) => {
 app.post('/dishes', validateDish, catchAsync( async(req, res, next) =>{
     console.log(req.body)
     const dish = new Dish(req.body.dish)
-    if(dish.price <0) throw new ExpressError('Invalid Price', 400)
     await dish.save(); 
     res.redirect(`/dishes/${dish._id}`)
 }))
@@ -76,7 +74,6 @@ app.put('/dishes/:id', validateDish, catchAsync(async(req, res) => {
     console.log("this is req.body", req.body)
     const {id} = req.params;
     const dish = await Dish.findByIdAndUpdate(id, {...req.body.dish})
-    if(req.body.dish.price <0) throw new ExpressError('Invalid Price', 400)
     {res.redirect(`/dishes/${dish._id}`)}
 })
 )
@@ -84,6 +81,15 @@ app.delete('/dishes/:id', catchAsync (async(req, res) =>{
     const {id} = req.params;
     await Dish.findByIdAndDelete(id)
     res.redirect('/dishes')
+}))
+
+app.post('/dishes/:id/reviews', catchAsync(async(req,res) => {
+    const dish = await Dish.findById(req.params.id);
+    const review = new Review(req.body.review)
+    dish.reviews.push(review)
+    await review.save()
+    await dish.save()
+    res.redirect(`/dishes/${dish._id}`)
 }))
 
 //for every request and every path (that doesn't exist)
