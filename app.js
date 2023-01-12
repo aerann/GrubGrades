@@ -61,7 +61,7 @@ app.get('/dishes/new', (req, res) => {
 })
 
 app.get('/dishes/:id', catchAsync (async (req, res) => {
-    const dish = await Dish.findById(req.params.id)
+    const dish = await Dish.findById(req.params.id).populate('reviews')
     res.render('dishes/show', {dish})
 }))
 
@@ -99,6 +99,13 @@ app.post('/dishes/:id/reviews', validateReview, catchAsync(async(req,res) => {
     await review.save()
     await dish.save()
     res.redirect(`/dishes/${dish._id}`)
+}))
+
+app.delete('/dishes/:id/reviews/:reviewId', catchAsync(async (req,res) => {
+    const {id, reviewId} = req.params; 
+    await Dish.findByIdAndUpdate(id, {$pull: {reviews: reviewId}}) //pulls anything with reviewId from reviews array
+    await Review.findByIdAndDelete(reviewId)
+    res.redirect(`/dishes/${id}`)
 }))
 
 //for every request and every path (that doesn't exist)
