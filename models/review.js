@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { dishSchema } = require('../schemas');
 const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
