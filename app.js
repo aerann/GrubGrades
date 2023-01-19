@@ -8,7 +8,9 @@ const methodOverride = require('method-override')
 const dishes = require('./routes/dishes')
 const reviews = require('./routes/reviews')
 
-mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') //shopApp database
+mongoose.set("strictQuery", false);
+
+mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') 
     .then(() => {
         console.log("mongo connection open")
     })
@@ -25,9 +27,11 @@ app.set('views', path.join (__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public'))) //tells express to serve our public directory
 
 app.use('/dishes', dishes)
 app.use('/dishes/:id/reviews', reviews) 
+
 
 app.get('/', (req, res) =>{
     res.render('home')
