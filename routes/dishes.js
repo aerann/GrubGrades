@@ -26,6 +26,10 @@ router.get('/new', (req, res) => {
 
 router.get('/:id', catchAsync (async (req, res) => {
     const dish = await Dish.findById(req.params.id).populate('reviews')
+    if(!dish){
+        req.flash('error', 'Cannot find that noodle dish!')
+        res.redirect('/dishes')
+    }
     res.render('dishes/show', {dish})
 }))
 
@@ -39,6 +43,10 @@ router.post('/', validateDish, catchAsync( async(req, res, next) =>{
 
 router.get('/:id/edit', catchAsync(async(req,res) =>{
     const dish = await Dish.findById(req.params.id)
+    if(!dish){
+        req.flash('error', 'Cannot find that noodle dish!')
+        res.redirect('/dishes')
+    }
     res.render('dishes/edit', {dish})
 }))
 
