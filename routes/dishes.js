@@ -29,7 +29,6 @@ router.get('/:id', catchAsync (async (req, res) => {
     res.render('dishes/show', {dish})
 }))
 
-
 //create new dish to database
 router.post('/', validateDish, catchAsync( async(req, res, next) =>{
     const dish = new Dish(req.body.dish)
@@ -47,12 +46,14 @@ router.put('/:id', validateDish, catchAsync(async(req, res) => {
     console.log("this is req.body", req.body)
     const {id} = req.params;
     const dish = await Dish.findByIdAndUpdate(id, {...req.body.dish})
+    req.flash('success', 'Successfully updated your noodle dish!')
     {res.redirect(`/dishes/${dish._id}`)}
 })
 )
 router.delete('/:id', catchAsync (async(req, res) =>{
     const {id} = req.params;
     await Dish.findByIdAndDelete(id)
+    req.flash('success', 'Successfully deleted noodle dish!')
     res.redirect('/dishes')
 }))
 
