@@ -32,9 +32,9 @@ router.get('/:id', catchAsync (async (req, res) => {
 
 //create new dish to database
 router.post('/', validateDish, catchAsync( async(req, res, next) =>{
-    console.log(req.body)
     const dish = new Dish(req.body.dish)
     await dish.save(); 
+    req.flash('success', 'Successfully added a new noodle dish!')
     res.redirect(`/dishes/${dish._id}`)
 }))
 

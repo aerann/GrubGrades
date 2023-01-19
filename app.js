@@ -3,6 +3,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 const ejsMate = require('ejs-mate')
 const session = require('express-session')
+const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
 
@@ -42,6 +43,14 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig)) 
+app.use(flash())
+
+//middleware to get access to flashed messages on every single request
+app.use((req,res,next) => {
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    next(); 
+})
 
 app.use('/dishes', dishes)
 app.use('/dishes/:id/reviews', reviews) 
