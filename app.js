@@ -9,6 +9,8 @@ const methodOverride = require('method-override')
 const Dish = require('./models/dish');
 const Review = require('./models/review')
 
+const dishes = require('./routes/dishes')
+
 mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') //shopApp database
     .then(() => {
         console.log("mongo connection open")
@@ -27,8 +29,10 @@ app.set('views', path.join (__dirname, 'views'))
 app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
 
-const validateDish = (req,res,next) => {
-    const {error} = dishSchema.validate(req.body);
+
+
+const validateReview = (req,res,next) => {
+    const { error } = reviewSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg,400)
@@ -37,60 +41,12 @@ const validateDish = (req,res,next) => {
     }
 }
 
-const validateReview = (req,res,next) => {
-    const {error} = reviewSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg,400)
-    } else{
-        next();
-    }
-}
+app.use('/dishes',dishes)
 
 app.get('/', (req, res) =>{
     res.render('home')
 })
 
-app.get('/dishes', catchAsync (async (req, res) =>{
-    const dishes = await Dish.find({})
-    res.render('dishes/index', {dishes})
-}))
-
-app.get('/dishes/new', (req, res) => {
-    res.render('dishes/new')
-})
-
-app.get('/dishes/:id', catchAsync (async (req, res) => {
-    const dish = await Dish.findById(req.params.id).populate('reviews')
-    res.render('dishes/show', {dish})
-}))
-
-
-//create new dish to database
-app.post('/dishes', validateDish, catchAsync( async(req, res, next) =>{
-    console.log(req.body)
-    const dish = new Dish(req.body.dish)
-    await dish.save(); 
-    res.redirect(`/dishes/${dish._id}`)
-}))
-
-app.get('/dishes/:id/edit', catchAsync(async(req,res) =>{
-    const dish = await Dish.findById(req.params.id)
-    res.render('dishes/edit', {dish})
-}))
-
-app.put('/dishes/:id', validateDish, catchAsync(async(req, res) => {
-    console.log("this is req.body", req.body)
-    const {id} = req.params;
-    const dish = await Dish.findByIdAndUpdate(id, {...req.body.dish})
-    {res.redirect(`/dishes/${dish._id}`)}
-})
-)
-app.delete('/dishes/:id', catchAsync (async(req, res) =>{
-    const {id} = req.params;
-    await Dish.findByIdAndDelete(id)
-    res.redirect('/dishes')
-}))
 
 app.post('/dishes/:id/reviews', validateReview, catchAsync(async(req,res) => {
     const dish = await Dish.findById(req.params.id);
