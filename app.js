@@ -6,9 +6,13 @@ const session = require('express-session')
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user')
 
-const dishes = require('./routes/dishes')
-const reviews = require('./routes/reviews')
+const userRoutes = require('./routes/users')
+const dishesRoutes = require('./routes/dishes')
+const reviewsRoutes = require('./routes/reviews')
 
 mongoose.set("strictQuery", false);
 
@@ -45,6 +49,15 @@ const sessionConfig = {
 app.use(session(sessionConfig)) 
 app.use(flash())
 
+app.use(passport.initialize());
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()));
+
+//tells passport how to seralize a user
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
+
 //middleware to get access to flashed messages on every single request
 app.use((req,res,next) => {
     res.locals.success = req.flash('success')
@@ -52,8 +65,15 @@ app.use((req,res,next) => {
     next(); 
 })
 
-app.use('/dishes', dishes)
-app.use('/dishes/:id/reviews', reviews) 
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({ email: 'ann@gmail.com', username: 'ann'})
+    const newUser = await User.register(user, 'chicken')
+    res.send(newUser)
+})
+
+app.use('/', userRoutes);
+app.use('/dishes', dishesRoutes)
+app.use('/dishes/:id/reviews', reviewsRoutes) 
 
 
 app.get('/', (req, res) =>{
