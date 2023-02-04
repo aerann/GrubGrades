@@ -29,10 +29,23 @@ router.get('/login', (req, res) => {
 })
 
 //flash error message if user was not authenticated
-router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
-    req.flash('success', 'Welcome back!')
-    res.redirect('/dishes')
-})
+// router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+//     req.flash('success', 'Welcome back!')
+//     const redirectUrl = req.session.returnTo || '/dishes'
+//     delete req.session.returnTo;
+//     res.redirect(redirectUrl)
+// })
+
+router.post('/login', passport.authenticate('local', {
+    failureFlash: true,
+    failureRedirect: '/login',
+    keepSessionInfo: true
+    }), (req, res) => {
+    req.flash('success', 'welcome back!');
+    const redirectUrl = req.session.returnTo || '/campgrounds';
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
+  });
 
 router.get('/logout', (req, res, next) => {
     req.logout(function(err) {
