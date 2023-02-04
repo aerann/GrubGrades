@@ -59,7 +59,9 @@ passport.deserializeUser(User.deserializeUser())
 
 
 //middleware to get access to flashed messages on every single request
+//access to currentUser in all templates
 app.use((req,res,next) => {
+    res.locals.currentUser = req.user; //gives us information on the currentUser (given from passport)
     res.locals.success = req.flash('success')
     res.locals.error = req.flash('error')
     next(); 
