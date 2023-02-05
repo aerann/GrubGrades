@@ -58,6 +58,7 @@ const seedDB = async() => {
         const price = Math.floor(Math.random() * 10) + 9
         const imgsSeed = Math.floor(Math.random() * imgs.length);
         const dish = new Dish({
+            author: '63dedf796da0983ea8d4181b', 
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(foods)}`, //random name of dish
             image: `${imgs[imgsSeed]}`,

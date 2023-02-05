@@ -28,7 +28,8 @@ router.get('/new', isLoggedIn, (req, res) => {
 })
 
 router.get('/:id', catchAsync (async (req, res) => {
-    const dish = await Dish.findById(req.params.id).populate('reviews')
+    const dish = await Dish.findById(req.params.id).populate('reviews').populate('author');
+    console.log(dish)
     if(!dish){
         req.flash('error', 'Cannot find that noodle dish!')
         res.redirect('/dishes')
@@ -39,6 +40,7 @@ router.get('/:id', catchAsync (async (req, res) => {
 //create new dish to database
 router.post('/', isLoggedIn, validateDish, catchAsync( async(req, res, next) =>{
     const dish = new Dish(req.body.dish)
+    dish.author = req.user._id; 
     await dish.save(); 
     req.flash('success', 'Successfully added a new noodle dish!')
     res.redirect(`/dishes/${dish._id}`)

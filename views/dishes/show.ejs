@@ -11,6 +11,7 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item text-muted"><%= dish.location %></li>
+            <li class="list-group-item text-muted">Submitted by <%= dish.author.username %></li>
             <li class="list-group-item">$<%= dish.price %>/bowl</li>
           </ul>
           <div class="card-body">
