@@ -1,22 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync')
-const { dishSchema } = require('../schemas.js')
-const {isLoggedIn} = require('../middleware')
+const {isLoggedIn, isAuthor, validateDish} = require('../middleware')
 
 
-const ExpressError = require('../utils/ExpressError')
 const Dish = require('../models/dish');
 
-const validateDish = (req,res,next) => {
-    const {error} = dishSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg,400)
-    } else{
-        next();
-    }
-}
 
 router.get('/', catchAsync (async (req, res) =>{
     const dishes = await Dish.find({})
@@ -46,35 +35,24 @@ router.post('/', isLoggedIn, validateDish, catchAsync( async(req, res, next) =>{
     res.redirect(`/dishes/${dish._id}`)
 }))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async(req,res) =>{
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async(req,res) =>{
     const {id} = req.params; 
     const dish = await Dish.findById(id)
     if(!dish){
         req.flash('error', 'Cannot find that noodle dish!')
         res.redirect('/dishes')
     }
-    //checking to see if you own the dish, if not you can not view the edit page
-    if (!dish.author.equals(req.user._id)){  
-        req.flash('error', 'You do not have permission to do that!')
-        return res.redirect(`/dishes/${id}`)
-    }
     res.render('dishes/edit', {dish})
-}))
+}));
 
-router.put('/:id', isLoggedIn, validateDish, catchAsync(async(req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateDish, catchAsync(async(req, res) => {
     const {id} = req.params;
-    const dish = await Dish.findById(id)
-    //checking to see if you have correct authorization
-    if (!dish.author.equals(req.user._id)){  
-        req.flash('error', 'You do not have permission to do that!')
-        return res.redirect(`/dishes/${id}`)
-    }
-    const dish2 = await Dish.findByIdAndUpdate(id, {...req.body.dish})
+    const dish = await Dish.findByIdAndUpdate(id, {...req.body.dish})
     req.flash('success', 'Successfully updated your noodle dish!')
     {res.redirect(`/dishes/${dish._id}`)}
-})
-)
-router.delete('/:id', isLoggedIn, catchAsync (async(req, res) =>{
+}))
+
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync (async(req, res) =>{
     const {id} = req.params;
     await Dish.findByIdAndDelete(id)
     req.flash('success', 'Successfully deleted noodle dish!')

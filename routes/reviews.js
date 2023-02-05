@@ -1,22 +1,10 @@
 const express = require('express');
 const router = express.Router({ mergeParams : true }); //allows you to have access to id
-
+const { validateReview } = require('../middleware')
 const Dish = require('../models/dish');
 const Review = require('../models/review')
-const {reviewSchema} = require('../schemas.js')
-
-const ExpressError = require('../utils/ExpressError')
 const catchAsync = require('../utils/catchAsync')
 
-const validateReview = (req,res,next) => {
-    const {error} = reviewSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg,400)
-    } else{
-        next();
-    }
-}
 
 router.post('/', validateReview, catchAsync(async(req,res) => {
     const dish = await Dish.findById(req.params.id);
