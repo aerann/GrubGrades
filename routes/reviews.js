@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router({ mergeParams : true }); //allows you to have access to id
-const { validateReview } = require('../middleware')
+const { validateReview, isLoggedIn } = require('../middleware')
 const Dish = require('../models/dish');
 const Review = require('../models/review')
 const catchAsync = require('../utils/catchAsync')
 
 
-router.post('/', validateReview, catchAsync(async(req,res) => {
+router.post('/', isLoggedIn, validateReview, catchAsync(async(req,res) => {
     const dish = await Dish.findById(req.params.id);
     const review = new Review(req.body.review)
+    review.author = req.user._id
     dish.reviews.push(review)
     await review.save()
     await dish.save()
