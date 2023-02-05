@@ -3,20 +3,20 @@ const router = express.Router();
 const dishes = require('../controllers/dishes')
 const catchAsync = require('../utils/catchAsync')
 const {isLoggedIn, isAuthor, validateDish} = require('../middleware')
+const Dish = require('../models/dish')
 
-router.get('/', catchAsync(dishes.index));
+router.route('/')
+    .get(catchAsync(dishes.index))
+    .post(isLoggedIn, validateDish, catchAsync(dishes.createDish))
 
+//needs to go before id route, or else will mistaken new as an id
 router.get('/new', isLoggedIn, dishes.renderNewForm)
 
-router.get('/:id', catchAsync(dishes.showDish))
+router.route('/:id')
+    .get(catchAsync(dishes.showDish))
+    .put(isLoggedIn, isAuthor, validateDish, catchAsync(dishes.updateDish))
+    .delete(isLoggedIn, isAuthor, catchAsync (dishes.deleteDish))
 
-//create new dish to database
-router.post('/', isLoggedIn, validateDish, catchAsync(dishes.createDish))
-
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(dishes.renderEditForm));
-
-router.put('/:id', isLoggedIn, isAuthor, validateDish, catchAsync(dishes.updateDish))
-
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync (dishes.deleteDish))
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(dishes.renderEditForm))
 
 module.exports = router;
