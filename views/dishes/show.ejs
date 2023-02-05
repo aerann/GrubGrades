@@ -14,12 +14,15 @@
             <li class="list-group-item text-muted">Submitted by <%= dish.author.username %></li>
             <li class="list-group-item">$<%= dish.price %>/bowl</li>
           </ul>
+
+          <% if(currentUser && dish.author.equals(currentUser._id)) {%> 
           <div class="card-body">
             <a href="/dishes/<%=dish._id%>/edit" class="card-link btn btn-info">Edit</a>
             <form class="d-inline" action="/dishes/<%=dish._id%>?_method=DELETE" method="POST">
               <button class="btn btn-danger">Delete</button>
           </form>
           </div>
+          <% } %> 
           <div class="card-footer text-muted">
               2 days ago
           </div>

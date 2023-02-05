@@ -42,7 +42,7 @@ router.post('/login', passport.authenticate('local', {
     keepSessionInfo: true
     }), (req, res) => {
     req.flash('success', 'welcome back!');
-    const redirectUrl = req.session.returnTo || '/campgrounds';
+    const redirectUrl = req.session.returnTo || '/dishes';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
   });
