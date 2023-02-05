@@ -17,7 +17,13 @@ router.get('/new', isLoggedIn, (req, res) => {
 })
 
 router.get('/:id', catchAsync (async (req, res) => {
-    const dish = await Dish.findById(req.params.id).populate('reviews').populate('author');
+    const dish = await Dish.findById(req.params.id).populate({
+        //populate all the reviews for a dish, as well as the author for the review
+        path:'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author'); //populate the ONE author for the dish
     console.log(dish)
     if(!dish){
         req.flash('error', 'Cannot find that noodle dish!')

@@ -1,6 +1,7 @@
 const { dishSchema, reviewSchema } = require('./schemas.js')
 const ExpressError = require('./utils/ExpressError')
 const Dish = require('./models/dish')
+const Review = require('./models/review')
 
 //user can only access certain routes if they're logged in 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -42,4 +43,15 @@ module.exports.validateReview = (req,res,next) => {
     } else{
         next();
     }
+}
+
+module.exports.isReviewAuthor = async(req, res, next) => {
+    const {id, reviewId} = req.params; 
+    const review = await Review.findById(reviewId)
+    //checking to see if you have correct authorization
+    if (!review.author.equals(req.user._id)){  
+        req.flash('error', 'You do not have permission to do that!')
+        return res.redirect(`/dishes/${id}`)
+    }
+    next(); 
 }
