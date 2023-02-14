@@ -21,7 +21,7 @@ router.get('/new', isLoggedIn, dishes.renderNewForm)
 
 router.route('/:id')
     .get(catchAsync(dishes.showDish))
-    .put(isLoggedIn, isAuthor, validateDish, catchAsync(dishes.updateDish))
+    .put(isLoggedIn, isAuthor, upload.array('image'), validateDish, catchAsync(dishes.updateDish))
     .delete(isLoggedIn, isAuthor, catchAsync (dishes.deleteDish))
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(dishes.renderEditForm))

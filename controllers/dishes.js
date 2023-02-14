@@ -48,6 +48,10 @@ module.exports.renderEditForm = async(req,res) =>{
 module.exports.updateDish = async(req, res) => {
     const {id} = req.params;
     const dish = await Dish.findByIdAndUpdate(id, {...req.body.dish})
+    const imgs = req.files.map(f => ({url: f.path, filename: f.filename }))
+    dish.images.push(...imgs) //push image data 
+    console.log(dish.images)
+    await dish.save()
     req.flash('success', 'Successfully updated your noodle dish!')
     {res.redirect(`/dishes/${dish._id}`)}
 }
