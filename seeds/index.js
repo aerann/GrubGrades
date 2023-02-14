@@ -61,9 +61,14 @@ const seedDB = async() => {
             author: '63dedf796da0983ea8d4181b', 
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(foods)}`, //random name of dish
-            image: `${imgs[imgsSeed]}`,
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam eos sint consequuntur in sequi qui ducimus debitis animi hic facilis maiores neque quod nemo numquam nihil id, eligendi et officiis?',
-            price //same as price:price
+            price, //same as price:price
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/dlmyi2vad/image/upload/v1676346022/RamenRater/lbk117es13mh3ovttirf.jpg',
+                    filename: 'RamenRater/lbk117es13mh3ovttirf',
+                }
+            ]
         })
         await dish.save();
     }
