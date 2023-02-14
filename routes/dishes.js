@@ -7,7 +7,8 @@ const Dish = require('../models/dish')
 
 //used for parsing images
 const multer = require('multer') 
-const upload = multer({ dest: 'uploads/'}) //sets destination for your images
+const { storage } = require('../cloudinary') //node automatically looks for index in a file
+const upload = multer({ storage }) //sets destination for your images
 
 
 
