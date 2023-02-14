@@ -18,7 +18,9 @@
                     Looks Good!
                 </div>
             </div>
-            <input type="file" name="image" id="" multiple>
+        
+            <!-- <input type="file" name="image" id="image" multiple> -->
+
             <!-- <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
                 <input class="form-control" type="text" id="image" name="dish[image]" required>
@@ -47,10 +49,16 @@
                 </div>
             </div>
 
+            <div class="mt-3 mb-3 custom-file">
+                <label for="image" class="form-label">Add Image(s)</label>
+                <input class="form-control" type="file" id="image" name="image" multiple>
+                <label for="image" class="custom-file-label text-muted"></label>
+            </div>
 
             <div class="mb-3">
                 <button class="btn btn-success">Add a Dish</button>
             </div>
+
         </form>
         <a href="/dishes">All Dishes</a>
         
