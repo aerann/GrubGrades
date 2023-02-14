@@ -10,9 +10,12 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createDish = async(req, res, next) =>{
+    
     const dish = new Dish(req.body.dish)
+    dish.images = req.files.map(f => ({url: f.path, filename: f.filename })) //take file path and file name and make an object for the image
     dish.author = req.user._id; 
     await dish.save(); 
+    console.log(dish)
     req.flash('success', 'Successfully added a new noodle dish!')
     res.redirect(`/dishes/${dish._id}`)
 }

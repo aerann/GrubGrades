@@ -14,11 +14,7 @@ const upload = multer({ storage }) //sets destination for your images
 
 router.route('/')
     .get(catchAsync(dishes.index))
-    // .post(isLoggedIn, validateDish, catchAsync(dishes.createDish))
-    .post(upload.array('image'), (req,res) => {
-        console.log(req.body, req.files)
-        res.send('it worked')
-    })
+    .post(isLoggedIn, upload.array('image'), catchAsync(dishes.createDish))
 
 //needs to go before id route, or else will mistaken new as an id
 router.get('/new', isLoggedIn, dishes.renderNewForm)

@@ -10,8 +10,10 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary,
-    folder: 'RamenRater', //folder in cloudinary that we should store things in
-    allowedFormats: ['jpeg', 'png', 'jpg']
+    params: {
+        folder: 'RamenRater', //folder in cloudinary that we should store things in
+        allowedFormats: ['jpeg', 'png', 'jpg']
+    }
 })
 
 module.exports = {
