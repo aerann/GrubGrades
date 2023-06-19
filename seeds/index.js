@@ -65,8 +65,8 @@ const seedDB = async() => {
             price, //same as price:price
             images: [
                 {
-                    url: 'https://res.cloudinary.com/dlmyi2vad/image/upload/v1676346022/RamenRater/lbk117es13mh3ovttirf.jpg',
-                    filename: 'RamenRater/lbk117es13mh3ovttirf',
+                    url: 'https://res.cloudinary.com/dlmyi2vad/image/upload/v1676400507/RamenRater/v5vs1nasy2ac783qyyfq.jpg',
+                    filename: 'RamenRater/aelbjrdannljvvcc1kbc',
                 }
             ]
         })

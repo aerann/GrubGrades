@@ -16,6 +16,7 @@ module.exports.createDish = async(req, res, next) =>{
     dish.images = req.files.map(f => ({url: f.path, filename: f.filename })) //take file path and file name and make an object for the image
     dish.author = req.user._id; 
     await dish.save(); 
+    console.log('about to console log dish')
     console.log(dish)
     req.flash('success', 'Successfully added a new noodle dish!')
     res.redirect(`/dishes/${dish._id}`)
