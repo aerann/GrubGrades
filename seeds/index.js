@@ -1,5 +1,6 @@
 // Seeds Database (deletes everything in database first)
 const mongoose = require('mongoose')
+mongoose.set("strictQuery", false);
 const cities = require('./cities')
 const axios = require('axios')
 const {foods, descriptors} =  require('./seedHelpers')
@@ -53,7 +54,7 @@ const seedDB = async() => {
     const imgs = [...imageSetOne, ...imageSetTwo, ...imageSetThree]; //90 random images
 
     //seeding data into dishes collection
-    for(let i =0; i<50; i++){
+    for(let i =0; i<51; i++){
         const random1000 = Math.floor(Math.random() * 1000); 
         const price = Math.floor(Math.random() * 10) + 9
         const imgsSeed = Math.floor(Math.random() * imgs.length);
@@ -63,6 +64,10 @@ const seedDB = async() => {
             title: `${sample(descriptors)} ${sample(foods)}`, //random name of dish
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam eos sint consequuntur in sequi qui ducimus debitis animi hic facilis maiores neque quod nemo numquam nihil id, eligendi et officiis?',
             price, //same as price:price
+            geometry: {
+                type: "Point",
+                coordinates: [-79.3832, 43.6532]
+            }, 
             images: [
                 {
                     url: 'https://res.cloudinary.com/dlmyi2vad/image/upload/v1676400507/RamenRater/v5vs1nasy2ac783qyyfq.jpg',

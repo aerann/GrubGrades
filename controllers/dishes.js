@@ -1,4 +1,7 @@
 const Dish = require('../models/dish');
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding")
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder= mbxGeocoding({accessToken: mapBoxToken})
 const { cloudinary } = require("../cloudinary")
 
 module.exports.index = async (req, res) =>{
@@ -11,15 +14,18 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createDish = async(req, res, next) =>{
-    
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.dish.location, 
+        limit: 1
+    }).send()
     const dish = new Dish(req.body.dish)
+    dish.geometry =  geoData.body.features[0].geometry //save the coordinates in the geometry field of dish
     dish.images = req.files.map(f => ({url: f.path, filename: f.filename })) //take file path and file name and make an object for the image
     dish.author = req.user._id; 
     await dish.save(); 
-    console.log('about to console log dish')
-    console.log(dish)
     req.flash('success', 'Successfully added a new noodle dish!')
     res.redirect(`/dishes/${dish._id}`)
+    console.log(dish);
 }
 
 module.exports.showDish = async (req, res) => {
