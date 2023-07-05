@@ -12,6 +12,8 @@ ImageSchema.virtual('thumbnail').get(function() {
    return this.url.replace('/upload', '/upload/w_250')
 })
 
+//include this line so virtuals are included in your dishes JSON 
+const opts = { toJSON: { virtuals: true } } 
 const DishSchema = new Schema({
     title: String, 
     price: Number, 
@@ -39,7 +41,13 @@ const DishSchema = new Schema({
             ref: "Review"
         }
     ]
-});
+}, opts);
+
+DishSchema.virtual('properties.popUpMarkup').get(function() {
+    return `
+    <strong><a href="/dishes/${this._id}">${this.title}</a></strong>
+    <p>${this.description.substring(0, 30)}...</p>`
+ })
 
 //post lets you have access to the data of what was deleted
 //deletes reviews when you delete a dish
