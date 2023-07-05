@@ -54,7 +54,7 @@ const seedDB = async() => {
     const imgs = [...imageSetOne, ...imageSetTwo, ...imageSetThree]; //90 random images
 
     //seeding data into dishes collection
-    for(let i =0; i<51; i++){
+    for(let i =0; i<200; i++){
         const random1000 = Math.floor(Math.random() * 1000); 
         const price = Math.floor(Math.random() * 10) + 9
         const imgsSeed = Math.floor(Math.random() * imgs.length);
