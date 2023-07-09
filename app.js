@@ -14,6 +14,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user')
 
+const mongoSanitize = require('express-mongo-sanitize')
+
 const userRoutes = require('./routes/users')
 const dishesRoutes = require('./routes/dishes')
 const reviewsRoutes = require('./routes/reviews')
@@ -38,6 +40,7 @@ app.set('views', path.join (__dirname, 'views'))
 app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public'))) //tells express to serve our public directory
+app.use(mongoSanitize) //used to get rid of any $, or - to prevent mongo injection attacks
 
 //configuring session
 const sessionConfig = {
