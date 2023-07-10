@@ -40,7 +40,7 @@ app.set('views', path.join (__dirname, 'views'))
 app.use(express.urlencoded({ extended: true})) //parse request body
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public'))) //tells express to serve our public directory
-app.use(mongoSanitize) //used to get rid of any $, or - to prevent mongo injection attacks
+app.use(mongoSanitize()) //used to get rid of any $, or - to prevent mongo injection attacks
 
 //configuring session
 const sessionConfig = {
