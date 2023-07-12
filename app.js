@@ -25,17 +25,32 @@ const userRoutes = require('./routes/users')
 const dishesRoutes = require('./routes/dishes')
 const reviewsRoutes = require('./routes/reviews')
 
+// const dbUrl = process.env.DB_URL
+
+// mongoose.set("strictQuery", false);
+
+// mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') 
+//     .then(() => {
+//         console.log("mongo connection open")
+//     })
+//     .catch(err => {
+//         console.log("oh no")
+//         console.log(err)
+//     });
+
+// mongodb://127.0.0.1:27017/grub-grades
+mongoose.connect('mongodb://127.0.0.1:27017/grub-grades', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 mongoose.set("strictQuery", false);
 
-mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') 
-    .then(() => {
-        console.log("mongo connection open")
-    })
-    .catch(err => {
-        console.log("oh no")
-        console.log(err)
-    });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
 
 const app = express()
 
