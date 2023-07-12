@@ -25,8 +25,9 @@ const userRoutes = require('./routes/users')
 const dishesRoutes = require('./routes/dishes')
 const reviewsRoutes = require('./routes/reviews')
 
-// const dbUrl = process.env.DB_URL
-
+const MongoStore = require('connect-mongo');
+const dbUrl = 'mongodb://127.0.0.1:27017/grub-grades'
+// process.env.DB_URL
 // mongoose.set("strictQuery", false);
 
 // mongoose.connect('mongodb://127.0.0.1:27017/grub-grades') 
@@ -63,8 +64,21 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public'))) //tells express to serve our public directory
 app.use(mongoSanitize()) //used to get rid of any $, or - to prevent mongo injection attacks
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 3600, //session only updates once every 24 hours
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
+
+store.on("error", function (e) {
+    console.log('session store error', e)
+})
+
 //configuring session
 const sessionConfig = {
+    store,
     name: 'session',
     secret: 'thisshouldbeabettersecret',
     resave: false,
