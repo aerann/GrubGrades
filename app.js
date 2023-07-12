@@ -64,11 +64,12 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public'))) //tells express to serve our public directory
 app.use(mongoSanitize()) //used to get rid of any $, or - to prevent mongo injection attacks
 
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!'
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 3600, //session only updates once every 24 hours
     crypto: {
-        secret: 'thisshouldbeabettersecret!'
+        secret
     }
 });
 
@@ -80,7 +81,7 @@ store.on("error", function (e) {
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'thisshouldbeabettersecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
