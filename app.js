@@ -40,7 +40,7 @@ const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/grub-grades'
 //     });
 
 // mongodb://127.0.0.1:27017/grub-grades
-mongoose.connect('mongodb://127.0.0.1:27017/grub-grades', {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
