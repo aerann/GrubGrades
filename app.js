@@ -26,7 +26,7 @@ const dishesRoutes = require('./routes/dishes')
 const reviewsRoutes = require('./routes/reviews')
 
 const MongoStore = require('connect-mongo');
-const dbUrl = 'mongodb://127.0.0.1:27017/grub-grades'
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/grub-grades'
 // process.env.DB_URL
 // mongoose.set("strictQuery", false);
 
